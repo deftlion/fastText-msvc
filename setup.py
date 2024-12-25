@@ -80,9 +80,9 @@ ext_modules = [
         ],
         language="c++",
         extra_compile_args=[
-            "-O0 -fno-inline -fprofile-arcs -pthread -march=native"
+            "-O0 -fno-inline -fprofile-arcs -pthread -march=native -std=c++17"
             if coverage
-            else "-O3 -funroll-loops -pthread -march=native"
+            else "-O3 -funroll-loops -pthread -march=native -std=c++17"
         ],
     ),
 ]
@@ -107,11 +107,11 @@ def has_flag(compiler, flags):
 
 def cpp_flag(compiler):
     """Return the -std=c++17 compiler flag."""
-    standards = ["-std=c++17"]
+    standards = ["-std=c++17", "/std:c++17"]
     for standard in standards:
         if has_flag(compiler, [standard]):
             return standard
-    raise RuntimeError("Unsupported compiler -- at least C++17 support " "is needed!")
+    raise RuntimeError("Unsupported compiler -- at least C++17 support is needed!")
 
 
 class BuildExt(build_ext):
@@ -153,6 +153,7 @@ class BuildExt(build_ext):
                 opts.append("-fvisibility=hidden")
         elif ct == "msvc":
             opts.append('/DVERSION_INFO=\\"%s\\"' % self.distribution.get_version())
+            opts.append('/std:c++17')
         for ext in self.extensions:
             ext.extra_compile_args = opts
             ext.extra_link_args = extra_link_args
