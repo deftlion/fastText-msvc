@@ -15,6 +15,12 @@
 #include <pybind11/stl.h>
 #include <real.h>
 #include <vector.h>
+
+// Define ssize_t for Windows
+#ifdef _WIN32
+#include <basetsd.h>
+typedef SSIZE_T ssize_t;
+#endif
 #include <cmath>
 #include <iterator>
 #include <sstream>
